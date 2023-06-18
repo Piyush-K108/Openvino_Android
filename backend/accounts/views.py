@@ -30,21 +30,22 @@ def CreateUserView(request):
     
     message_handler = MessageHandler(phone, user.otp).set_otp()
     user.save()
-    return JsonResponse({"message": "User created successfully. OTP sent."})
+    # print(message_handler)
+    return JsonResponse({"uid":user.uid})
 
 
 
 
 @api_view(['POST'])
-def VerifyOTP_View(request):
+def VerifyOTP_View(request,uid):
     data = request.data
-    phone ="+91"+data.get('phone')
+    uid = uid
     otp = data.get('otp')
-    print(phone)
-    if not phone or not otp:
-        return JsonResponse({"error": "Phone number and OTP are required."}, status=400)
+    print(uid)
+    if not uid or not otp:
+        return JsonResponse({"error": "uid number and OTP are required."}, status=400)
 
-    profile = UserAccounts.objects.filter(phone=phone).first()
+    profile = UserAccounts.objects.filter(uid=uid).first()
     if not profile:
         return JsonResponse({"error": "User profile not found."}, status=404)
 
