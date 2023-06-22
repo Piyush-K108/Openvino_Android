@@ -36,6 +36,7 @@ def CreateUserView(request):
 
 
 
+
 @api_view(['POST'])
 def VerifyOTP_View(request,uid):
     data = request.data
