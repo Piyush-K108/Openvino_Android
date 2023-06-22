@@ -12,10 +12,17 @@ class UserAccountManager(BaseUserManager):
         user.save()
         return user
     
-    def create_teamuser(self, phone, password=None):
-        user = self.model(phone=phone)
-        user.set_password(password)
+    def create_teamuser(self, name , phone, password,**extra_fields):
+      
+        if not (phone):
+            raise ValueError("User must have a phone ")
+        
+        phone = phone
+        name = name
+        password = password
+        user = self.model(phone=phone,name = name,is_staff=True,password=password)
         user.save()
+
         return user
     
     def create_superuser(self, phone, password=None, **extra_fields):
