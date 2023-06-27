@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-@emnxsfzw7mcw98u&uevrbn&^^(f9b_hikgxgpz$iu0ud%bxay
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1","10.0.2.2:8000","10.0.2.2",
-                 "5c57-2401-4900-1c09-b75c-ecac-4afa-b0a7-1042.ngrok-free.app"
+                 "8139-2401-4900-1ca3-bb3b-5c61-1b78-c5f4-53ab.ngrok-free.app"
                  ]
 
 
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'accounts',
     'Bike_Info',
     'Team',
+    'Payment'
 ]
 
 MIDDLEWARE = [

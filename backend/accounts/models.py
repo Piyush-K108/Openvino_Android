@@ -11,7 +11,7 @@ class UserAccountManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
-    
+     
     def create_teamuser(self, name , phone, password,**extra_fields):
       
         if not (phone):
@@ -55,6 +55,8 @@ class UserAccounts(AbstractBaseUser, PermissionsMixin):
     ProfilePic = models.ImageField(upload_to=FileName, null=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    Adhar_Card = models.ImageField(upload_to=FileName, null=True)
+    license_id = models.ImageField(upload_to=FileName, null=True)
 
     USERNAME_FIELD = 'phone'
 
