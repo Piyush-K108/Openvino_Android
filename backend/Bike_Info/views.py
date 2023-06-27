@@ -121,23 +121,3 @@ def deassign_bike(request, phone):
 
 
 
-class Edit_Profile(generics.UpdateAPIView):
-    serializer_class = UserUpdateSerializer
-    parser_classes = (MultiPartParser, FormParser)
-    lookup_field = 'phone'
-
-    def get_queryset(self):
-        phone = self.kwargs['phone']
-        return UserAccounts.objects.get(phone=phone)
-
-    def put(self, request, *args, **kwargs):
-        phone = self.kwargs['phone']
-        ev = request.data.get('EV')
-        instance = self.get_queryset()
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        if ev:
-            serializer.validated_data.pop('license_id')  # Remove license_id from data
-
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
