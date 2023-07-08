@@ -14,7 +14,7 @@ class Bike_Info(models.Model):
     b_id             = models.CharField(max_length=255 ,primary_key=True,default=random_bike)
     Electrical       = models.BooleanField(default= False)
     KM_Previous      = models.BigIntegerField(null = False)
-    KM_Later         = models.BigIntegerField(null = False)
+    KM_Now        = models.BigIntegerField(null = False)
     Condition        = models.BooleanField(default= True)
     license_plate    = models.CharField(max_length=255,null  = False,unique=True)
     Pic_after        = models.ImageField(upload_to = FileName,null = True)

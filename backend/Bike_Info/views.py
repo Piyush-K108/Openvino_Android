@@ -73,6 +73,7 @@ def assign_bike_to_bike(request, phone):
     if not bike:
         return HttpResponseBadRequest("Bike not available for assignment.")
 
+    
     # Update the bike information
     serializer = BikeassignSerializer(bike, data=request.data)
     if serializer.is_valid():

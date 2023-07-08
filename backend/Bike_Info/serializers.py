@@ -11,6 +11,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         model = UserAccounts
         fields = '__all__'
 
+
 class BikeassignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike_Info
