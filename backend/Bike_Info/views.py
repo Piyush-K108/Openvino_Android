@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
@@ -8,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import generics,status
 from django.core.files.base import ContentFile
 from rest_framework.parsers import MultiPartParser, FormParser
-
+import base64
 UserAccounts = get_user_model()
 
 @api_view(['POST'])
@@ -35,21 +36,26 @@ def assign_bike_to_user(request, phone):
     # Assuming the phone number is the unique identifier for the user
     user = get_object_or_404(UserAccounts.objects, phone=phone)
     ev = request.data.get('EV')
-    adhar_card = request.data.get('Adhar_Card')['uri']
-    adhar_card_name = request.data.get('Adhar_Card')['name']
-    license_Id = request.data.get('license_id')['uri']
-    license_Id_name = request.data.get('license_id')['name']
-    adhar_content = ContentFile(adhar_card)
-    license_content = ContentFile(license_Id)
-    print(ev,adhar_card)
-    if ev:
-        user.Adhar_Card.save(adhar_card_name, adhar_content, save=True)
-    else:
-        user.Adhar_Card.save(adhar_card_name, adhar_content, save=True)
-        user.license_id.save(license_Id_name, license_content, save=True)
-        
+    adhar_card = request.data.get('Adhar_Card')
+    adhar_card1 = json.loads(adhar_card)
+    adhar_data = adhar_card1.get("data", "")
 
-    return JsonResponse({"data":user.name})
+    if ev:   
+        adhar_content = ContentFile(base64.b64decode(adhar_data), name=user.name+'AdharCard.jpg')
+        user.Adhar_Card = adhar_content
+        user.save()
+    else:
+        license = request.data.get('license_id')
+        license1 = json.loads(license)
+        license_data = license1.get("data", "")
+        license_content = ContentFile(base64.b64decode(license_data), name=user.name+'license_Id.jpg')
+        adhar_content = ContentFile(base64.b64decode(adhar_data), name=user.name+'AdharCard.jpg')
+        user.Adhar_Card = adhar_content
+        user.license_id = license_content
+        user.save()
+ 
+    serializer = UserUpdateSerializer(user)
+    return Response(serializer.data)
 
 
 @api_view(['PUT'])

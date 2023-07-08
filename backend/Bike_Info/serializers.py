@@ -4,7 +4,7 @@ from accounts.models import UserAccounts
 class BikeInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike_Info
-        fields = ['Electrical','KM','license_plate']
+        fields = ['Electrical','KM_Previous','license_plate']
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,11 +14,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class BikeassignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike_Info
-        fields = ['Pic_before','Estimated_Amount','KM']
+        fields = ['Pic_before','Estimated_Amount','KM_Previous']
 
 
 
 class BikeDropSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike_Info
-        fields = ['Condition','KM','Pic_after','Exact_Amount','Payed','Mode_of_Payment']
+        fields = ['Condition','KM_Later','Pic_after','Exact_Amount','Payed','Mode_of_Payment']
