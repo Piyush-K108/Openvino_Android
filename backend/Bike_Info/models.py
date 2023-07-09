@@ -14,7 +14,7 @@ class Bike_Info(models.Model):
     b_id             = models.CharField(max_length=255 ,primary_key=True,default=random_bike)
     Electrical       = models.BooleanField(default= False)
     KM_Previous      = models.BigIntegerField(null = False)
-    KM_Now        = models.BigIntegerField(null = False)
+    KM_Now           = models.BigIntegerField(null = False)
     Condition        = models.BooleanField(default= True)
     license_plate    = models.CharField(max_length=255,null  = False,unique=True)
     Pic_after        = models.ImageField(upload_to = FileName,null = True)
@@ -34,8 +34,10 @@ class Bike_Info(models.Model):
 class Rental(models.Model):
     user = models.ForeignKey(user, on_delete=models.CASCADE)
     bike = models.ForeignKey(Bike_Info, on_delete=models.CASCADE)
-    rental_date = models.DateField(auto_now_add=True)
-    return_date = models.DateField(null=True)
+    rental_date = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    return_date = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+
     class Meta:
         db_table = 'Rental'
     def __str__(self):

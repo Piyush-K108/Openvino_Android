@@ -15,11 +15,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class BikeassignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike_Info
-        fields = ['Pic_before','Estimated_Amount','KM_Previous']
+        fields = '__all__'
 
 
 
 class BikeDropSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike_Info
-        fields = ['Condition','KM_Later','Pic_after','Exact_Amount','Payed','Mode_of_Payment']
+        fields ='__all__'
