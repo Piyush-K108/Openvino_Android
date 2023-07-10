@@ -12,6 +12,8 @@ from django.core.files.base import ContentFile
 from rest_framework.parsers import MultiPartParser, FormParser
 import base64
 UserAccounts = get_user_model()
+import numpy as np
+import cv2
 
 @api_view(['POST'])
 def createBike(request):
@@ -42,21 +44,21 @@ def assign_bike_to_user(request, phone):
 
     ev = request.data.get('EV')
     adhar_card = request.data.get('Adhar_Card')
-    adhar_card1 = json.loads(adhar_card)
-    adhar_data = adhar_card1.get("data", "")
+    # adhar_card1 = json.loads(adhar_card)
+    # adhar_data = adhar_card1.get("data", "")
 
     if ev:   
-        adhar_content = ContentFile(base64.b64decode(adhar_data), name=user.name+'AdharCard.jpg')
-        user.Adhar_Card = adhar_content
+        # adhar_content = ContentFile(base64.b64decode(adhar_data), name = user.name if user.name is not None else user.phone + 'AdharCard.jpg')
+        user.Adhar_Card = adhar_card
         user.save()
     else:
         license = request.data.get('license_id')
-        license1 = json.loads(license)
-        license_data = license1.get("data", "")
-        license_content = ContentFile(base64.b64decode(license_data), name=user.name+'license_Id.jpg')
-        adhar_content = ContentFile(base64.b64decode(adhar_data), name=user.name+'AdharCard.jpg')
-        user.Adhar_Card = adhar_content
-        user.license_id = license_content
+        # license1 = json.loads(license)
+        # license_data = license1.get("data", "")
+        # license_content = ContentFile(base64.b64decode(license_data),  name = user.name if user.name is not None else user.phone + 'License_id.jpg')
+        # adhar_content = ContentFile(base64.b64decode(adhar_data), name = user.name if user.name is not None else user.phone + 'AdharCard.jpg')
+        user.Adhar_Card = adhar_card
+        user.license_id = license
         user.save()
  
     serializer = UserUpdateSerializer(user)
@@ -78,21 +80,33 @@ def assign_bike_to_bike(request, phone):
     if not bike:
         return HttpResponseBadRequest("Bike not available for assignment.")
     Pic = request.data.get('Pic_before')
-    Pic_before = json.loads(Pic)
-    Pic_data = Pic_before.get("data", "")
+    # Pic_before = json.loads(Pic)
+    # Pic_data = Pic_before.get("data", "")
+
+
+
+    KM_Pic = request.data.get('KM_Reading')
+    # KM_Pic = json.loads(KM_Pic)
+    # KM_Pic = KM_Pic.get("data", "")
+     
+    # KM_Pic_content = ContentFile(base64.b64decode(KM_Pic), name=user.name+'Pic_Before.jpg')
+    # KM_Pic = np.frombuffer(KM_Pic_content,np.int8)
+    # cv2.imdecode(KM_Pic,cv2.IMREAD_COLOR)
+
 
     # Pic_content = ContentFile(base64.b64decode(Pic_data), name=user.name+'Pic_Before.jpg')
-    bike.Pic_before = Pic_data
+    bike.Pic_before = Pic
     bike.Estimated_Amount =  request.data.get('Estimated_Amount')
-    bike.KM_Previous = request.data.get('KM')
+    bike.KM_Previous = request.data.get('KM_Previous')
     bike.is_assigned = True
     bike.save()
 
     # Create a rental record
     rental = Rental.objects.create(user=user, bike=bike)
     rental.rental_date = datetime.now()
+    rental.return_date = None
     rental.save()
-    serializer = BikeassignSerializer(user)
+    serializer = BikeDropSerializer(rental)
     return JsonResponse({f'Bike assigned to {user.pk} successfully.': serializer.data})
 
 
@@ -123,11 +137,11 @@ def deassign_bike(request, phone):
     Mode_of_Payment = request.data.get('Mode_of_Payment')
     ev = bike.Electrical
 
-    Pic_after = json.loads(Pic)
-    Pic_data = Pic_after.get("data", "")
-    Pic_content = ContentFile(base64.b64decode(Pic_data), name=f"{user.name}_Pic_after.jpg")
+    # Pic_after = json.loads(Pic)
+    # Pic_data = Pic_after.get("data", "")
+    # Pic_content = ContentFile(base64.b64decode(Pic_data), name=f"{user.name}_Pic_after.jpg")
 
-    bike.Pic_after = Pic_content
+    bike.Pic_after = Pic
     old_datetime = rental.rental_date.replace(tzinfo=timezone.utc)  # Make the old datetime offset-aware
     new_datetime = datetime.now(timezone.utc)
     time_difference = new_datetime - old_datetime 
@@ -154,7 +168,7 @@ def deassign_bike(request, phone):
     rental.save()
 
     # Serialize the bike information
-    serializer = BikeDropSerializer(bike)
+    serializer = BikeDropSerializer(rental)
 
     # Include the serialized bike information in the response
     return JsonResponse({'message': 'Bike deassigned successfully.', 'bike': serializer.data})

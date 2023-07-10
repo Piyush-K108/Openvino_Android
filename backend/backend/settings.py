@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-@emnxsfzw7mcw98u&uevrbn&^^(f9b_hikgxgpz$iu0ud%bxay
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1","10.0.2.2:8000","10.0.2.2",
-                 "8139-2401-4900-1ca3-bb3b-5c61-1b78-c5f4-53ab.ngrok-free.app"
+                 "671a-2401-4900-1ca3-819a-5ca9-4138-c0f3-c54.ngrok-free.app"
                  ]
 
 
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'Team',
     'Payment'
 ]
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760*2
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

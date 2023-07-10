@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Bike_Info
+from .models import Bike_Info , Rental
 from accounts.models import UserAccounts
 class BikeInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,5 +21,5 @@ class BikeassignSerializer(serializers.ModelSerializer):
 
 class BikeDropSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Bike_Info
+        model = Rental
         fields ='__all__'
